@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DescriptionPage extends StatefulWidget {
   @override
@@ -50,6 +51,23 @@ class _DescriptionPageState extends State<DescriptionPage> {
               ),
             ),
           ),
+          StreamBuilder<QuerySnapshot>(
+            stream: Firestore.instance.collection('My Hero Academia').snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+              if(!snapshot.hasData)
+                return CircularProgressIndicator();
+              else
+                {
+                  final int cardLength = snapshot.data.documents.length;
+                  return ListView.builder(itemCount: cardLength,itemBuilder: (BuildContext context, int index) {
+                    final DocumentSnapshot _card = snapshot.data.documents[index];
+                    return ListTile(
+                      title: Text(_card['number']),
+                    );
+                  });
+                }
+            },
+          )
         ]));
   }
 }
