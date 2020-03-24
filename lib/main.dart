@@ -8,7 +8,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'LMRA',
-      home: DescriptionPage(),
+      home: MyHomePage(title: "LMRA",),
+      debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/DescriptionPage': (BuildContext context) => new DescriptionPage()
       },
@@ -32,6 +33,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.of(context).pushNamed('/DescriptionPage')),
     );
   }
 }
