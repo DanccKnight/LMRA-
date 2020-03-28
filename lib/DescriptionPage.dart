@@ -17,57 +17,33 @@ class _DescriptionPageState extends State<DescriptionPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     precacheImage(img.image, context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: CustomScrollView(slivers: <Widget>[
-          SliverAppBar(
-            leading: GestureDetector(
-              child: Icon(Icons.arrow_back),
-              onTap: () => Navigator.of(context).pop(),
-            ),
-            shape: ContinuousRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(50.0),
-                    bottomRight: Radius.circular(50.0))),
-            elevation: 5,
-            expandedHeight: 200,
-            pinned: true,
-            floating: true,
-            flexibleSpace: FlexibleSpaceBar(
-              /*centerTitle: true,
-          title: Text(
-            'Boku no Hero Academia',
-          ),*/
-              background: ClipRRect(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15.0),
-                    bottomRight: Radius.circular(15.0)),
-                child: img,
-              ),
-            ),
+        body: Container(
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              GestureDetector(
+                child: Icon(Icons.arrow_back),
+                onTap: () => Navigator.of(context).pop(),
+              )
+            ],
           ),
-          StreamBuilder<QuerySnapshot>(
-            stream: Firestore.instance.collection('My Hero Academia').snapshots(),
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-              if(!snapshot.hasData)
-                return CircularProgressIndicator();
-              else
-                {
-                  final int cardLength = snapshot.data.documents.length;
-                  return ListView.builder(itemCount: cardLength,itemBuilder: (BuildContext context, int index) {
-                    final DocumentSnapshot _card = snapshot.data.documents[index];
-                    return ListTile(
-                      title: Text(_card['number']),
-                    );
-                  });
-                }
-            },
+          Container(
+            child: img,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(15.0),
+                  bottomRight: Radius.circular(15.0)),
+            ),
           )
-        ]));
+        ],
+      ),
+    ));
   }
 }
