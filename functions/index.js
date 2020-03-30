@@ -7,7 +7,7 @@ var msgData;
 var token = "eUwv2hxyzBU:APA91bF-e4bB1IFEv_IJAs67F1tdchvQDKrxikT0krp5kl2VSJ_lN76kwvkn0l3NUKz_r5Ut7q-FcUG7IUE4XGKgJDCmI3czvPEQQkn78IX6W9Xb0o6vyQ0GyLDXN84ZY_PEhaUTgp66";
 
 exports.offerTrigger = functions.firestore.document(
-    'My Hero Academia/{chapter}'
+    'MyHeroAcademia/{chapter}'
     ).onCreate((snapshot,context) => {
         msgData = snapshot.data();
         var payload = {
