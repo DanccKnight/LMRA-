@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lmra/DescriptionPage.dart';
 import 'package:lmra/Utils.dart';
+import 'HomePage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+import 'dart:async';
 
 void main() => runApp(MyApp());
 
@@ -23,39 +27,41 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+class MessageHandler extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MessageHandlerState createState() => _MessageHandlerState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-
-  final FirebaseMessaging _messaging = FirebaseMessaging();
+class _MessageHandlerState extends State<MessageHandler> {
+  final Firestore _db = Firestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _messaging.getToken().then((value) => print("token -> $value"));
+    _fcm.subscribeToTopic('My Hero Academia');
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+
+        final snackbar = SnackBar(
+          content: Text(message['notification']['title']),
+          action: SnackBarAction(label: 'Go', onPressed: () => null),
+        );
+        Scaffold.of(context).showSnackBar(snackbar);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+    );
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: RaisedButton(
-            child: Text("View chapters"),
-            onPressed: () =>
-                Navigator.of(context).pushNamed('/DisplayChaptersPage')),
-      ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed('/DescriptionPage')),
-    );
+    return null;
   }
 }
