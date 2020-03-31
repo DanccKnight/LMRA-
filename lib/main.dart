@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       home: SignInPage(),
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
+        '/SignInPage': (BuildContext context) => SignInPage(),
         '/HomePage': (BuildContext context) => MyHomePage(title: 'LMRA'),
         '/DescriptionPage': (BuildContext context) => DescriptionPage(),
         '/DisplayChaptersPage': (BuildContext context) => DisplayChaptersPage()
