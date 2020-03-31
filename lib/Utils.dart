@@ -13,7 +13,7 @@ class _DisplayChaptersPageState extends State<DisplayChaptersPage> {
         appBar: AppBar(title: Text("Chapters")),
         body: FutureBuilder(
             future: Firestore.instance
-                .collection('My Hero Academia')
+                .collection('BNHA')
                 .getDocuments(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
