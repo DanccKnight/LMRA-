@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lmra/DescriptionPage.dart';
+import 'package:lmra/UI/DescriptionPage.dart';
 import 'package:lmra/Utils.dart';
-import 'HomePage.dart';
+import 'package:lmra/UI/HomePage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:io';
-import 'dart:async';
+import 'package:lmra/UI/SignIn.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,14 +13,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'LMRA',
-      home: MyHomePage(
-        title: "LMRA",
-      ),
+      home: SignInPage(),
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        '/DescriptionPage': (BuildContext context) => new DescriptionPage(),
-        '/DisplayChaptersPage': (BuildContext context) =>
-            new DisplayChaptersPage()
+        '/HomePage': (BuildContext context) => MyHomePage(title: 'LMRA'),
+        '/DescriptionPage': (BuildContext context) => DescriptionPage(),
+        '/DisplayChaptersPage': (BuildContext context) => DisplayChaptersPage()
       },
     );
   }
@@ -39,7 +36,6 @@ class _MessageHandlerState extends State<MessageHandler> {
   @override
   void initState() {
     super.initState();
-    _fcm.subscribeToTopic('My Hero Academia');
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
@@ -57,7 +53,6 @@ class _MessageHandlerState extends State<MessageHandler> {
         print("onLaunch: $message");
       },
     );
-
   }
 
   @override
