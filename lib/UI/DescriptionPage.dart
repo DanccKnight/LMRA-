@@ -23,25 +23,46 @@ class _DescriptionPageState extends State<DescriptionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: <Widget>[
-        Container(
-          constraints: BoxConstraints.expand(height: 250),
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.only(left: 10, top: 20),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('Assets/Images/bnha.jpg'),
-                  fit: BoxFit.cover)),
-          child: GestureDetector(
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-                size: 26,
-              ),
-              onTap: () => Navigator.of(context).pop()),
-        ),
-      ],
-    ));
+        body: SingleChildScrollView(
+          child: FutureBuilder(
+            future: Firestore.instance
+                .collection('BNHA')
+                .getDocuments(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+      final int cardLength = snapshot.data.documents.length;
+      return Column(
+
+          children: <Widget>[
+            Container(
+              constraints: BoxConstraints.expand(height: 220),
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.only(left: 10, top: 20),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('Assets/Images/bnha.jpg'),
+                      fit: BoxFit.cover)),
+              child: GestureDetector(
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                    size: 26,
+                  ),
+                  onTap: () => Navigator.of(context).pop()),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemCount: cardLength,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(snapshot.data.documents[index].documentID),
+                );
+              },
+            )
+          ],
+      );
+    }),
+        ));
   }
 }
