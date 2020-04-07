@@ -33,10 +33,20 @@ class _DescriptionPageState extends State<DescriptionPage> {
       child: Column(
         children: <Widget>[
           Container(
-            constraints: BoxConstraints.expand(height: 250),
-            child: Image(
-              image: AssetImage('Assets/Images/bnha.jpg'),
-            ),
+            constraints: BoxConstraints.expand(height: 220),
+            alignment: Alignment.topLeft,
+            padding: const EdgeInsets.only(left: 10, top: 20),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('Assets/Images/bnha.jpg'),
+                    fit: BoxFit.cover)),
+            child: GestureDetector(
+                child: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 26,
+                ),
+                onTap: () => Navigator.of(context).pop()),
           ),
           FutureBuilder(
               future: snap,
