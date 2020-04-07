@@ -17,7 +17,10 @@ class _DescriptionPageState extends State<DescriptionPage> {
   }
 
   Future<QuerySnapshot> getSnap() async {
-    return Firestore.instance.collection('BNHA').getDocuments();
+    return Firestore.instance
+        .collection('BNHA')
+        .orderBy('number', descending: true)
+        .getDocuments();
   }
 
   @override
@@ -61,7 +64,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                     break;
                   default:
                     return ListView.builder(
-                      primary: false,
+                        primary: false,
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         itemCount: snapshot.data.documents.length,
