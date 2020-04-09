@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'MangaPage.dart';
+
 class DescriptionPage extends StatefulWidget {
   @override
   _DescriptionPageState createState() => _DescriptionPageState();
@@ -10,17 +12,17 @@ class _DescriptionPageState extends State<DescriptionPage> {
   Image img;
   Future<QuerySnapshot> snap;
 
-  void initState() {
-    super.initState();
-    img = Image.asset("Assets/Images/bnha.jpg");
-    snap = getSnap();
-  }
-
   Future<QuerySnapshot> getSnap() async {
     return Firestore.instance
         .collection('BNHA')
         .orderBy('number', descending: true)
         .getDocuments();
+  }
+
+  void initState() {
+    super.initState();
+    img = Image.asset("Assets/Images/bnha.jpg");
+    snap = getSnap();
   }
 
   @override
@@ -55,27 +57,35 @@ class _DescriptionPageState extends State<DescriptionPage> {
               future: snap,
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return Center(
+                if (!snapshot.hasData)
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 215),
                       child: CircularProgressIndicator(),
-                    );
-                    break;
-                  default:
-                    return ListView.builder(
-                        primary: false,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data.documents.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title:
-                                Text(snapshot.data.documents[index].documentID),
-                          );
-                        });
-                    break;
-                }
+                    ),
+                  );
+                else
+                  return ListView.builder(
+                      primary: false,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title:
+                              Text(snapshot.data.documents[index].documentID),
+                          onTap: () {
+                            var docId =
+                                snapshot.data.documents[index].documentID;
+                            //Navigator.of(context).pushNamed('/MangaPage');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MangaPage(doc: docId)));
+                          },
+                        );
+                      });
               })
         ],
       ),
