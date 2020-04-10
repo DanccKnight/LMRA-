@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lmra/Data/Chapter.dart';
+import 'dart:convert';
 
 class MangaPage extends StatefulWidget {
   var doc;
@@ -27,7 +28,6 @@ class _MangaPageState extends State<MangaPage> {
         .document('Boku no Hero Academia Chapter 265')
         .get();
     chapter = Chapter.fromJson(document.data);
-    print(chapter.images);
     return document;
   }
 
@@ -42,13 +42,13 @@ class _MangaPageState extends State<MangaPage> {
                 if (!snapshot.hasData)
                   return Center(child: CircularProgressIndicator());
                 return ListView.builder(
-                  primary: false,
-                  shrinkWrap: true,
+                    primary: false,
+                    shrinkWrap: true,
                     itemCount: chapter.images.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
-                        child: Image.network(chapter.images[index]),
+                        child: Image.network(chapter.images[index].replaceAll(RegExp(r'\r'), "")),
                       );
                     });
               }),
