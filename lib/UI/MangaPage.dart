@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lmra/Data/Chapter.dart';
-import 'dart:convert';
 
 class MangaPage extends StatefulWidget {
   var doc;
@@ -23,10 +22,8 @@ class _MangaPageState extends State<MangaPage> {
   }
 
   Future<DocumentSnapshot> getDoc() async {
-    DocumentSnapshot document = await Firestore.instance
-        .collection('BNHA')
-        .document('Boku no Hero Academia Chapter 265')
-        .get();
+    DocumentSnapshot document =
+        await Firestore.instance.collection('BNHA').document(widget.doc).get();
     chapter = Chapter.fromJson(document.data);
     return document;
   }
@@ -34,13 +31,16 @@ class _MangaPageState extends State<MangaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.doc),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: FutureBuilder(
               future: doc,
               builder: (BuildContext context, snapshot) {
                 if (!snapshot.hasData)
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: Center(child: CircularProgressIndicator()));
                 return ListView.builder(
                     primary: false,
                     shrinkWrap: true,
@@ -48,7 +48,19 @@ class _MangaPageState extends State<MangaPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
-                        child: Image.network(chapter.images[index].replaceAll(RegExp(r'\r'), "")),
+                        child: Image.network(
+                          chapter.images[index].replaceAll(RegExp(r'\r'), ""),
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent loadingProgress) {
+                            if(loadingProgress != null)
+                              return Center(child: Padding(
+                                padding: const EdgeInsets.only(top: 170,bottom: 190),
+                                child: SizedBox(width:30, height: 30,child: CircularProgressIndicator()),
+                              ));
+                            else
+                              return child;
+                          },
+                        ),
                       );
                     });
               }),
