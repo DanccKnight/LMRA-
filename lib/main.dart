@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lmra/UI/DescriptionPage.dart';
-import 'package:lmra/UI/HomePage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lmra/UI/SignIn.dart';
@@ -16,7 +15,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/SignInPage': (BuildContext context) => SignInPage(),
-        '/HomePage': (BuildContext context) => MyHomePage(title: 'LMRA'),
         '/DescriptionPage': (BuildContext context) => DescriptionPage(),
       },
     );
@@ -38,7 +36,6 @@ class _MessageHandlerState extends State<MessageHandler> {
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-
         final snackbar = SnackBar(
           content: Text(message['notification']['title']),
           action: SnackBarAction(label: 'Go', onPressed: () => null),
