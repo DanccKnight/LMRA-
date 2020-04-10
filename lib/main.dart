@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lmra/UI/DescriptionPage.dart';
-import 'package:lmra/Utils.dart';
 import 'package:lmra/UI/HomePage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,7 +18,6 @@ class MyApp extends StatelessWidget {
         '/SignInPage': (BuildContext context) => SignInPage(),
         '/HomePage': (BuildContext context) => MyHomePage(title: 'LMRA'),
         '/DescriptionPage': (BuildContext context) => DescriptionPage(),
-        '/DisplayChaptersPage': (BuildContext context) => DisplayChaptersPage()
       },
     );
   }

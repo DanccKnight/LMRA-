@@ -40,7 +40,7 @@ class _MangaPageState extends State<MangaPage> {
               future: doc,
               builder: (BuildContext context, snapshot) {
                 if (!snapshot.hasData)
-                  return Center(child: Center(child: CircularProgressIndicator()));
+                  return Container();
                 return ListView.builder(
                     primary: false,
                     shrinkWrap: true,
