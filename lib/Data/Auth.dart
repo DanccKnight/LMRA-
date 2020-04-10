@@ -42,7 +42,8 @@ class Auth {
       final AuthCredential authCredential = GoogleAuthProvider.getCredential(
           idToken: googleSignInAuthentication.idToken,
           accessToken: googleSignInAuthentication.accessToken);
-      final FirebaseUser firebaseUser = (await _auth.signInWithCredential(authCredential)).user;
+      final FirebaseUser firebaseUser =
+          (await _auth.signInWithCredential(authCredential)).user;
       setUserData(firebaseUser);
       UserSingleton().fireUser = firebaseUser;
       Auth.updateUserCollection();

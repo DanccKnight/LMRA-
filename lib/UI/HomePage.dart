@@ -12,6 +12,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,17 +47,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.of(context).pushReplacementNamed('/SignInPage'));
               },
             ),
-          ],
-        ),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Text("Welcome, ${UserSingleton().user.name}"),
-            RaisedButton(
-                child: Text("View chapters"),
-                onPressed: () =>
-                    Navigator.of(context).pushNamed('/DisplayChaptersPage')),
           ],
         ),
       ),
