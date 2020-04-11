@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'LMRA',
+      theme: ThemeData.dark(),
       home: SignInPage(),
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{

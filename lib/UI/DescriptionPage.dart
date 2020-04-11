@@ -36,62 +36,66 @@ class _DescriptionPageState extends State<DescriptionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                accountName: Text(UserSingleton().user.name),
-                accountEmail: Text(UserSingleton().user.email),
-                currentAccountPicture: GestureDetector(
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        UserSingleton().user.profileImage == null
-                            ? CircleAvatar()
-                            : UserSingleton().user.profileImage),
-                  ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.all(0),
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: Text(UserSingleton().user.name),
+              accountEmail: Text(UserSingleton().user.email),
+              currentAccountPicture: GestureDetector(
+                child: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(UserSingleton().user.profileImage),
                 ),
               ),
-              ListTile(
-                leading: Icon(Icons.info),
-                title: Text("About"),
-                onTap: () => _showAbout(),
-              ),
-              ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text("Sign out"),
-                onTap: () {
-                  Auth.logoutUser().then((value) => Navigator.of(context)
-                      .pushReplacementNamed('/SignInPage'));
-                },
-              ),
-            ],
-          ),
+            ),
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text("About"),
+              onTap: () => _showAbout(),
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text("Sign out"),
+              onTap: () {
+                Auth.logoutUser().then((value) =>
+                    Navigator.of(context).pushReplacementNamed('/SignInPage'));
+              },
+            ),
+          ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                constraints: BoxConstraints.expand(height: 220),
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.only(left: 10, top: 20),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('Assets/Images/bnha.jpg'),
-                        fit: BoxFit.cover)),
-              ),
-              FutureBuilder(
-                  future: snap,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (!snapshot.hasData)
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              constraints: BoxConstraints.expand(height: 220),
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.only(left: 10, top: 20),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('Assets/Images/bnha.jpg'),
+                      fit: BoxFit.cover)),
+            ),
+            FutureBuilder(
+                future: snap,
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      return Container(child: Center(child: Text('Hm')));
+                    case ConnectionState.waiting:
                       return Center(
                         child: Padding(
                           padding: const EdgeInsets.only(top: 215),
                           child: CircularProgressIndicator(),
                         ),
                       );
-                    else
+                    case ConnectionState.active:
+                    case ConnectionState.done:
                       return ListView.builder(
+                          padding: EdgeInsets.all(0),
                           primary: false,
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -99,11 +103,12 @@ class _DescriptionPageState extends State<DescriptionPage> {
                           itemBuilder: (BuildContext context, int index) {
                             return ListTile(
                               title: Text(
-                                  snapshot.data.documents[index].documentID),
+                                snapshot.data.documents[index].documentID,
+                                style: TextStyle(fontSize: 18),
+                              ),
                               onTap: () {
                                 var docId =
                                     snapshot.data.documents[index].documentID;
-                                //Navigator.of(context).pushNamed('/MangaPage');
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -112,10 +117,26 @@ class _DescriptionPageState extends State<DescriptionPage> {
                               },
                             );
                           });
-                  })
-            ],
-          ),
-        ));
+                    default:
+                      return Container(
+                          child: Center(
+                        child: Text(
+                            'There seems to be an issue with the database. \nPlease try again later.'),
+                      ));
+                  }
+                })
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.refresh),
+        onPressed: () {
+          setState(() {
+            snap = getSnap();
+          });
+        },
+      ),
+    );
   }
 
   void _showAbout() {

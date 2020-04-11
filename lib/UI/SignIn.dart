@@ -14,7 +14,7 @@ class _SignInPageState extends State<SignInPage> {
         child: RaisedButton(
           child: Text('Sign in with Google'),
             onPressed: () async => Auth.signInWithGoogle()
-                .then((value) => Navigator.of(context).pushReplacementNamed('/MangaPage'))),
+                .then((value) => Navigator.of(context).pushReplacementNamed('/DescriptionPage'))),
       ),
     );
   }
