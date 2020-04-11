@@ -35,19 +35,24 @@ class _MessageHandlerState extends State<MessageHandler> {
   void initState() {
     super.initState();
     _fcm.configure(
+      //Called when app is in foreground and we get a notification
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
         final snackbar = SnackBar(
           content: Text(message['notification']['title']),
-          action: SnackBarAction(label: 'Go', onPressed: () => null),
+          action: SnackBarAction(label: 'Go', onPressed: () => Navigator.of(context).pushNamed('/DescriptionPage')),
         );
         Scaffold.of(context).showSnackBar(snackbar);
       },
+      //Called when app is in the background
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DescriptionPage()));
       },
+      //Called when app is terminated and we get a notiification
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DescriptionPage()));
       },
     );
   }
