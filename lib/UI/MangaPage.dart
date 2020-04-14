@@ -47,7 +47,7 @@ class _MangaPageState extends State<MangaPage> {
                     itemCount: chapter.images.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 5),
                         child: Image.network(
                           chapter.images[index].replaceAll(RegExp(r'\r'), ""),
                           loadingBuilder: (BuildContext context, Widget child,

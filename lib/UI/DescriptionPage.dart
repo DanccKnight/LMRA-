@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lmra/Data/Auth.dart';
@@ -11,7 +14,6 @@ class DescriptionPage extends StatefulWidget {
 }
 
 class _DescriptionPageState extends State<DescriptionPage> {
-  Image img;
   Future<QuerySnapshot> snap;
 
   Future<QuerySnapshot> getSnap() async {
@@ -22,15 +24,16 @@ class _DescriptionPageState extends State<DescriptionPage> {
   }
 
   void initState() {
-    super.initState();
-    img = Image.asset("Assets/Images/bnha.jpg");
+    updateUserDetails().then((value) => setState(() {}));
     snap = getSnap();
+    super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    precacheImage(img.image, context);
+  Future updateUserDetails() async {
+    await FirebaseAuth.instance.currentUser().then((user) {
+      UserSingleton().fireUser = user;
+      Auth.setUserData(user);
+    });
   }
 
   @override
@@ -41,13 +44,20 @@ class _DescriptionPageState extends State<DescriptionPage> {
           padding: EdgeInsets.all(0),
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text(UserSingleton().user.name),
-              accountEmail: Text(UserSingleton().user.email),
+              accountName: UserSingleton().fireUser == null
+                  ? Text('name')
+                  : Text(UserSingleton().fireUser.displayName),
+              accountEmail: UserSingleton().fireUser == null
+                  ? Text('email')
+                  : Text(UserSingleton().fireUser.email),
               currentAccountPicture: GestureDetector(
-                child: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(UserSingleton().user.profileImage),
-                ),
+                child: UserSingleton().fireUser == null
+                    ? CircleAvatar(
+                        backgroundColor: Colors.blue,
+                      )
+                    : CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(UserSingleton().fireUser.photoUrl)),
               ),
             ),
             ListTile(
@@ -149,7 +159,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                 text: TextSpan(
               text:
                   "This app has been made by Ansuman Acharya. If you have any reviews/feedback, drop me an email at ansuman91225@gmail.com",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             )),
             actions: <Widget>[
               FlatButton(
