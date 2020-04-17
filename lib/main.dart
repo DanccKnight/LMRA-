@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:lmra/UI/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lmra/Data/Auth.dart';
@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
               );
             case ConnectionState.active:
             case ConnectionState.done:
-              if (snapshot.hasData) return DescriptionPage();
+              if (snapshot.hasData) return HomePage();
           }
           return SignInPage();
         });
@@ -46,6 +46,7 @@ class _MyAppState extends State<MyApp> {
       home: onAuthStateChanged(),
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
+        '/HomePage': (BuildContext context) => HomePage(),
         '/SignInPage': (BuildContext context) => SignInPage(),
         '/DescriptionPage': (BuildContext context) => DescriptionPage(),
       },
