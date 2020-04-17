@@ -4,8 +4,9 @@ import 'package:lmra/Data/Chapter.dart';
 
 class MangaPage extends StatefulWidget {
   var doc;
+  bool flag;
 
-  MangaPage({Key key, this.doc}) : super(key: key);
+  MangaPage({Key key, this.doc,this.flag}) : super(key: key);
 
   @override
   _MangaPageState createState() => _MangaPageState();
@@ -18,12 +19,19 @@ class _MangaPageState extends State<MangaPage> {
   @override
   void initState() {
     super.initState();
-    doc = getDoc();
+    widget.flag == true ? doc = getBnhaDoc() : doc = getHaikyuuDoc();
   }
 
-  Future<DocumentSnapshot> getDoc() async {
+  Future<DocumentSnapshot> getBnhaDoc() async {
     DocumentSnapshot document =
         await Firestore.instance.collection('BNHA').document(widget.doc).get();
+    chapter = Chapter.fromJson(document.data);
+    return document;
+  }
+
+  Future<DocumentSnapshot> getHaikyuuDoc() async {
+    DocumentSnapshot document =
+    await Firestore.instance.collection('Haikyuu').document(widget.doc).get();
     chapter = Chapter.fromJson(document.data);
     return document;
   }
