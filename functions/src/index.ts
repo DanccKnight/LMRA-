@@ -5,6 +5,7 @@ admin.initializeApp();
 const db = admin.firestore();
 const fcm = admin.messaging();
 
+//cloud function to send notification about BNHA
 export const sendToTheDevice = functions.firestore
     .document('BNHA/{chapterId}')
     .onCreate(async snapshot => {
@@ -30,6 +31,39 @@ export const sendToTheDevice = functions.firestore
             notification: {
                 title: 'A new chapter has been released',
                 body: `Read Boku no Hero Academia Chapter ${chapter.number} now!`,
+                clickAction: 'FLUTTER_NOTIFICATION_CLICK',
+            },
+        };
+
+        return fcm.sendToDevice(tokens, payload);
+    });
+
+//cloud function to send notification about BNHA    
+export const sendNotificationAboutHaikyuu = functions.firestore
+    .document('Haikyuu/{chapterId}')
+    .onCreate(async snapshot => {
+        const chapter = snapshot.data();
+        var tokens = [];
+
+        await db.collection('Users').get()
+            .then((snapshot) => {
+
+                if(snapshot.empty)
+                    console.log('No devices');
+                else {
+
+                    for(var doc of snapshot.docs){
+                        tokens.push(doc.data().token)
+                    }
+                }
+            })
+
+
+
+        const payload = {
+            notification: {
+                title: 'A new chapter has been released',
+                body: `Read Haikyuu Chapter ${chapter.number} now!`,
                 clickAction: 'FLUTTER_NOTIFICATION_CLICK',
             },
         };
