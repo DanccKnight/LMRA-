@@ -24,7 +24,6 @@ dependencies:
   google_sign_in: ^4.3.0
   firebase_messaging: 6.0.13
   json_serializable: ^3.3.0
-  flutter_launcher_icons: ^0.7.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -53,6 +52,7 @@ flutter:
      - Assets/Images/bnha.jpg
      - Assets/Images/mha1.jpg
      - Assets/Images/hh.jpg
+     - Assets/Images/nice.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
