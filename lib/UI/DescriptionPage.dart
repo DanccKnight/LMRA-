@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,73 +7,42 @@ import 'package:lmra/Data/UserSingleton.dart';
 import 'MangaPage.dart';
 
 class DescriptionPage extends StatefulWidget {
+  bool flag;
+
+  DescriptionPage({Key key, this.flag}) : super(key: key);
+
   @override
   _DescriptionPageState createState() => _DescriptionPageState();
 }
 
 class _DescriptionPageState extends State<DescriptionPage> {
-  Future<QuerySnapshot> snap;
+  Future<QuerySnapshot> snapshot;
 
-  Future<QuerySnapshot> getSnap() async {
+  @override
+  void initState() {
+    widget.flag == true
+        ? snapshot = getBnhaSnap()
+        : snapshot = getHaikyuuSnap();
+    super.initState();
+  }
+
+  Future<QuerySnapshot> getBnhaSnap() async {
     return Firestore.instance
         .collection('BNHA')
         .orderBy('number', descending: true)
         .getDocuments();
   }
 
-  void initState() {
-    updateUserDetails().then((value) => setState(() {}));
-    snap = getSnap();
-    super.initState();
-  }
-
-  Future updateUserDetails() async {
-    await FirebaseAuth.instance.currentUser().then((user) {
-      UserSingleton().fireUser = user;
-      Auth.setUserData(user);
-    });
+  Future<QuerySnapshot> getHaikyuuSnap() async {
+    return Firestore.instance
+        .collection('Haikyuu')
+        .orderBy('number', descending: true)
+        .getDocuments();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.all(0),
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: UserSingleton().fireUser == null
-                  ? Text('name')
-                  : Text(UserSingleton().fireUser.displayName),
-              accountEmail: UserSingleton().fireUser == null
-                  ? Text('email')
-                  : Text(UserSingleton().fireUser.email),
-              currentAccountPicture: GestureDetector(
-                child: UserSingleton().fireUser == null
-                    ? CircleAvatar(
-                        backgroundColor: Colors.blue,
-                      )
-                    : CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(UserSingleton().fireUser.photoUrl)),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.info),
-              title: Text("About"),
-              onTap: () => _showAbout(),
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text("Sign out"),
-              onTap: () {
-                Auth.logoutUser().then((value) =>
-                    Navigator.of(context).pushReplacementNamed('/SignInPage'));
-              },
-            ),
-          ],
-        ),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -85,11 +52,13 @@ class _DescriptionPageState extends State<DescriptionPage> {
               padding: const EdgeInsets.only(left: 10, top: 20),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('Assets/Images/bnha.jpg'),
+                      image: widget.flag == true
+                          ? AssetImage('Assets/Images/bnha.jpg')
+                          : AssetImage('Assets/Images/nice.png'),
                       fit: BoxFit.cover)),
             ),
             FutureBuilder(
-                future: snap,
+                future: snapshot,
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   switch (snapshot.connectionState) {
@@ -142,7 +111,9 @@ class _DescriptionPageState extends State<DescriptionPage> {
         child: Icon(Icons.refresh),
         onPressed: () {
           setState(() {
-            snap = getSnap();
+            widget.flag == true
+                ? snapshot = getBnhaSnap()
+                : snapshot = getHaikyuuSnap();
           });
         },
       ),
