@@ -1,8 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lmra/Data/Auth.dart';
-import 'package:lmra/Data/UserSingleton.dart';
 
 import 'MangaPage.dart';
 
@@ -47,6 +44,14 @@ class _DescriptionPageState extends State<DescriptionPage> {
         child: Column(
           children: <Widget>[
             Container(
+              child: GestureDetector(
+                child: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 26
+                ),
+                onTap: () => Navigator.of(context).pop(),
+              ),
               constraints: BoxConstraints.expand(height: 220),
               alignment: Alignment.topLeft,
               padding: const EdgeInsets.only(left: 10, top: 20),
@@ -92,7 +97,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            MangaPage(doc: docId)));
+                                            MangaPage(doc: docId,flag: widget.flag)));
                               },
                             );
                           });
