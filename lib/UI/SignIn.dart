@@ -30,7 +30,7 @@ class _SignInPageState extends State<SignInPage> {
                       onPressed: () async {
                         await Auth.signInWithGoogle().then((value) {
                           Navigator.of(context)
-                              .pushReplacementNamed('/DescriptionPage');
+                              .pushReplacementNamed('/HomePage');
                         });
                       },
                       child: Text("Login with Google",
