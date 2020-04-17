@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lmra/Data/Auth.dart';
 import 'package:lmra/Data/UserSingleton.dart';
+import 'package:lmra/UI/DescriptionPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,6 +15,20 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     updateUserDetails().then((value) => setState(() {}));
     super.initState();
+  }
+
+  Future<QuerySnapshot> getBnhaSnap() async {
+    return Firestore.instance
+        .collection('BNHA')
+        .orderBy('number', descending: true)
+        .getDocuments();
+  }
+
+  Future<QuerySnapshot> getHaikyuuSnap() async {
+    return Firestore.instance
+        .collection('Haikyuu')
+        .orderBy('number', descending: true)
+        .getDocuments();
   }
 
   Future updateUserDetails() async {
@@ -70,9 +86,10 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushNamed('/DescriptionPage');
-                },
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DescriptionPage(flag: true))),
                 child: Card(
                   elevation: 5,
                   child: Row(
@@ -94,7 +111,8 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.only(bottom: 5.0),
                               child: Text('Boku no Hero Academia',
                                   style: TextStyle(
-                                      fontSize: 19, fontWeight: FontWeight.w600)),
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w600)),
                             ),
                             Row(
                               children: <Widget>[
@@ -121,7 +139,8 @@ class _HomePageState extends State<HomePage> {
                                       child: Text(
                                         'Adventure',
                                         style: TextStyle(
-                                            color: Colors.white.withOpacity(0.5)),
+                                            color:
+                                                Colors.white.withOpacity(0.5)),
                                       ),
                                     ),
                                   ),
@@ -130,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Padding(padding: const EdgeInsets.only(bottom: 90)),
                             Padding(
-                              padding: const EdgeInsets.only(top: 7,left: 0),
+                              padding: const EdgeInsets.only(top: 7, left: 0),
                               child: Text('Ongoing'),
                             ),
                           ],
@@ -144,9 +163,10 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: GestureDetector(
-                onTap: (){
-                  Navigator.of(context).pushNamed('/DescriptionPage');
-                },
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DescriptionPage(flag: false))),
                 child: Card(
                   elevation: 5,
                   child: Row(
@@ -168,7 +188,8 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.only(bottom: 5.0),
                               child: Text('Haikyuu!!',
                                   style: TextStyle(
-                                      fontSize: 19, fontWeight: FontWeight.w600)),
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w600)),
                             ),
                             Row(
                               children: <Widget>[
@@ -181,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                                     child: Text('Sports',
                                         style: TextStyle(
                                             color:
-                                            Colors.white.withOpacity(0.5))),
+                                                Colors.white.withOpacity(0.5))),
                                   ),
                                 ),
                                 Padding(
@@ -195,7 +216,8 @@ class _HomePageState extends State<HomePage> {
                                       child: Text(
                                         'Comedy',
                                         style: TextStyle(
-                                            color: Colors.white.withOpacity(0.5)),
+                                            color:
+                                                Colors.white.withOpacity(0.5)),
                                       ),
                                     ),
                                   ),
@@ -204,7 +226,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Padding(padding: const EdgeInsets.only(bottom: 90)),
                             Padding(
-                              padding: const EdgeInsets.only(top: 7,left: 0),
+                              padding: const EdgeInsets.only(top: 7, left: 0),
                               child: Text('Ongoing'),
                             ),
                           ],
