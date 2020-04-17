@@ -7,7 +7,6 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +28,11 @@ class _SignInPageState extends State<SignInPage> {
                       minWidth: MediaQuery.of(context).size.width,
                       onPressed: () async {
                         await Auth.signInWithGoogle().then((value) {
-                          Navigator.of(context)
-                              .pushReplacementNamed('/HomePage');
+                          value == true
+                              ? Navigator.of(context)
+                                  .pushReplacementNamed('/HomePage')
+                              : Scaffold.of(context).showSnackBar(
+                                  SnackBar(content: Text("Signin failed")));
                         });
                       },
                       child: Text("Login with Google",

@@ -33,7 +33,7 @@ class Auth {
     UserSingleton().user.token = await _firebaseMessaging.getToken();
   }
 
-  static Future<void> signInWithGoogle() async {
+  static Future<bool> signInWithGoogle() async {
     try {
       final GoogleSignInAccount googleSignInAccount =
           await _googleSignIn.signIn();
@@ -44,9 +44,13 @@ class Auth {
           accessToken: googleSignInAuthentication.accessToken);
       final FirebaseUser firebaseUser =
           (await _auth.signInWithCredential(authCredential)).user;
+      var currentUser = await _auth.currentUser();
       setUserData(firebaseUser);
       UserSingleton().fireUser = firebaseUser;
       Auth.updateUserCollection();
+      if(currentUser != null)
+        return true;
+      return false;
     } catch (e) {
       print(e);
     }
