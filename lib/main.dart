@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'package:lmra/UI/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lmra/Data/Auth.dart';
-import 'package:lmra/Data/UserSingleton.dart';
 import 'package:lmra/UI/DescriptionPage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,11 +23,7 @@ class _MyAppState extends State<MyApp> {
             case ConnectionState.none:
               return Container(child: Center(child: Text('Hm')));
             case ConnectionState.waiting:
-              return Center(
-                  child: Center(
-                      child: CircularProgressIndicator()
-                  )
-              );
+              return Center(child: Center(child: CircularProgressIndicator()));
             case ConnectionState.active:
             case ConnectionState.done:
               if (snapshot.hasData) return HomePage();
@@ -60,7 +53,6 @@ class MessageHandler extends StatefulWidget {
 }
 
 class _MessageHandlerState extends State<MessageHandler> {
-  final Firestore _db = Firestore.instance;
   final FirebaseMessaging _fcm = FirebaseMessaging();
 
   @override
